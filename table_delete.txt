@@ -1,0 +1,205 @@
+-- ==========================================================
+-- DATABASE CREATION
+-- ==========================================================
+CREATE DATABASE IF NOT EXISTS labiba_digital_school 
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_unicode_ci;
+
+USE labiba_digital_school;
+
+-- ==========================================================
+-- 1. ORGANIZATIONS TABLE (মাল্টি-অর্গানাইজেশন মূল টেবিল)
+-- ==========================================================
+CREATE TABLE organizations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    code VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    address TEXT,
+    logo VARCHAR(255),
+    status ENUM('active', 'inactive') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- ==========================================================
+-- 2. BRANCHES TABLE (ব্রাঞ্চসমূহ - অর্গানাইজেশনের অধীন)
+-- ==========================================================
+CREATE TABLE branches (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    organization_id INT NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    code VARCHAR(50) NOT NULL,
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    address TEXT,
+    status ENUM('active', 'inactive') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
+);
+
+-- ==========================================================
+-- 3. ACADEMIC YEARS TABLE (শিক্ষাবর্ষ টেবিল)
+-- ==========================================================
+CREATE TABLE academic_years (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    organization_id INT NOT NULL,
+    branch_id INT DEFAULT NULL, 
+    year_name VARCHAR(50) NOT NULL, -- যেমন: "2026", "2026-2027"
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    is_current TINYINT(1) DEFAULT 0, 
+    status ENUM('active', 'inactive') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE SET NULL
+);
+
+-- ==========================================================
+-- 4. CLASSES & SECTIONS TABLES (ক্লাস এবং সেকশন)
+-- ==========================================================
+CREATE TABLE classes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    organization_id INT NOT NULL,
+    class_name VARCHAR(50) NOT NULL, 
+    numeric_value INT, 
+    status ENUM('active', 'inactive') DEFAULT 'active',
+    FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
+);
+
+CREATE TABLE sections (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    class_id INT NOT NULL,
+    section_name VARCHAR(50) NOT NULL, 
+    FOREIGN KEY (class_id) classes(id) ON DELETE CASCADE
+);
+
+-- ==========================================================
+-- 5. GUARDIANS TABLE (অভিভাবক টেবিল - আলাদা ও স্বতন্ত্র)
+-- ==========================================================
+-- একজন অভিভাবক একবার রেজিস্টার্ড থাকবেন, তার একাধিক সন্তান থাকতে পারে
+CREATE TABLE guardians (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    organization_id INT NOT NULL,
+    father_name VARCHAR(100) NOT NULL,
+    father_phone VARCHAR(20) NOT NULL,
+    father_occupation VARCHAR(100),
+    mother_name VARCHAR(100),
+    mother_phone VARCHAR(20),
+    mother_occupation VARCHAR(100),
+    guardian_name VARCHAR(100), -- যদি বাবা-মা ছাড়া অন্য কেউ মূল অভিভাবক হন
+    guardian_relation VARCHAR(50),
+    guardian_phone VARCHAR(20),
+    present_address TEXT NOT NULL,
+    permanent_address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
+);
+
+-- ==========================================================
+-- 6. STUDENTS TABLE (শিক্ষার্থীদের মূল প্রফাইল)
+-- ==========================================================
+-- এখানে guardians_id এর মাধ্যমে মূল অভিভাবকের টেবিলটি যুক্ত করা হয়েছে
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    organization_id INT NOT NULL,
+    branch_id INT NOT NULL,
+    guardian_id INT NOT NULL, -- অভিভাবক টেবিলের সাথে রিলেশন
+    admission_no VARCHAR(50) UNIQUE NOT NULL, 
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100),
+    date_of_birth DATE,
+    gender ENUM('Male', 'Female', 'Other'),
+    blood_group VARCHAR(10),
+    religion VARCHAR(50),
+    student_photo VARCHAR(255),
+    
+    status ENUM('active', 'inactive', 'graduated', 'transferred') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE CASCADE,
+    FOREIGN KEY (guardian_id) REFERENCES guardians(id) ON DELETE RESTRICT
+);
+
+-- ==========================================================
+-- 7. STUDENT SESSIONS TABLE (প্রতি বছরের ক্লাস ও রোল অ্যাসাইনমেন্ট)
+-- ==========================================================
+CREATE TABLE student_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    organization_id INT NOT NULL,
+    branch_id INT NOT NULL,
+    academic_year_id INT NOT NULL, 
+    class_id INT NOT NULL,
+    section_id INT NOT NULL,
+    roll_no INT,
+    shift VARCHAR(50) DEFAULT 'Morning', 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE CASCADE,
+    FOREIGN KEY (academic_year_id) REFERENCES academic_years(id) ON DELETE CASCADE,
+    FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE,
+    FOREIGN KEY (section_id) REFERENCES sections(id) ON DELETE CASCADE
+);
+
+-- ==========================================================
+-- 8. STUDENT ATTENDANCE TABLE (উপস্থিতি)
+-- ==========================================================
+CREATE TABLE student_attendances (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    branch_id INT NOT NULL,
+    academic_year_id INT NOT NULL,
+    attendance_date DATE NOT NULL,
+    status ENUM('Present', 'Absent', 'Late', 'Leave') DEFAULT 'Present',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE CASCADE,
+    FOREIGN KEY (academic_year_id) REFERENCES academic_years(id) ON DELETE CASCADE
+);
+
+-- ==========================================================
+-- 9. STUDENT FEES & PAYMENTS TABLES (ফি ও পেমেন্ট হিস্ট্রি)
+-- ==========================================================
+CREATE TABLE student_fees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    branch_id INT NOT NULL,
+    academic_year_id INT NOT NULL,
+    fee_title VARCHAR(150) NOT NULL, 
+    total_amount DECIMAL(10, 2) NOT NULL,
+    paid_amount DECIMAL(10, 2) DEFAULT 0.00,
+    due_amount DECIMAL(10, 2) NOT NULL,
+    due_date DATE,
+    status ENUM('Unpaid', 'Partial', 'Paid') DEFAULT 'Unpaid',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE CASCADE,
+    FOREIGN KEY (academic_year_id) REFERENCES academic_years(id) ON DELETE CASCADE
+);
+
+CREATE TABLE student_payments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_fee_id INT NOT NULL,
+    student_id INT NOT NULL,
+    branch_id INT NOT NULL,
+    receipt_no VARCHAR(100) UNIQUE NOT NULL,
+    amount_paid DECIMAL(10, 2) NOT NULL,
+    payment_method ENUM('Cash', 'Bkash', 'Nagad', 'Bank', 'Online') DEFAULT 'Cash',
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    collected_by INT, 
+    
+    FOREIGN KEY (student_fee_id) REFERENCES student_fees(id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    FOREIGN KEY (branch_id) REFERENCES branches(id) ON DELETE CASCADE
+);

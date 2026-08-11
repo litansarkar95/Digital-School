@@ -1,0 +1,204 @@
+
+         <div class="content">
+       
+         <div class="panel-card" id="addUserForm">
+           <div class="panel-header">
+            <div class="panel-title-wrap">
+                <div class="panel-title-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <div>
+                    <h5>Create Class</h5>
+
+                    <p>Manage Create Class</p>
+                </div>
+            </div>
+
+            <a class="btn btn-primary" href="<?php echo base_url(); ?>academic/classes">
+                <i class="fa-solid fa-list me-1"></i>
+
+                All Class List
+</a>
+        </div>
+        <div class="panel-body">
+            <!-- FORM HEADER -->
+
+           
+
+            <!-- FORM -->
+
+            <form id="userForm" novalidate>
+                <div class="row g-3">
+                    <!-- =================================================
+                             FIRST NAME
+                        ================================================== -->
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="firstName"> First Name </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-user"></i>
+                            </span>
+
+                            <input type="text" class="form-control" id="firstName" placeholder="Enter first name" />
+                        </div>
+
+                        <!-- ERROR -->
+
+                        <div id="firstNameError" class="validation-error" style="display: none">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                            Please enter your first name.
+                        </div>
+                    </div>
+
+                    <!-- =================================================
+                             LAST NAME
+                        ================================================== -->
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="lastName"> Last Name </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-user"></i>
+                            </span>
+
+                            <input type="text" class="form-control" id="lastName" placeholder="Enter last name" />
+                        </div>
+                    </div>
+
+                    <!-- =================================================
+                             EMAIL
+                        ================================================== -->
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="email"> Email Address </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-regular fa-envelope"></i>
+                            </span>
+
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com" />
+                        </div>
+                    </div>
+
+                    <!-- =================================================
+                             PHONE
+                        ================================================== -->
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="phone"> Phone Number </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-phone"></i>
+                            </span>
+
+                            <input type="text" class="form-control" id="phone" placeholder="+880 1XXXXXXXXX" />
+                        </div>
+                    </div>
+
+                    <!-- =================================================
+                             ROLE
+                        ================================================== -->
+
+                    <div class="col-md-6">
+                        <label class="form-label"> User Role </label>
+
+                        <select class="form-select select2" id="role">
+                            <option value="">Select Role</option>
+                            <option value="admin">Administrator</option>
+                            <option value="manager">Manager</option>
+                            <option value="editor">Editor</option>
+                            <option value="user">User</option>
+                        </select>
+                    </div>
+
+                    <!-- =================================================
+                             STATUS
+                        ================================================== -->
+
+                    <div class="col-md-6">
+                        <label class="form-label"> Account Status </label>
+
+                        <select class="form-select select2" data-placeholder="Select account status">
+                            <option></option>
+
+                            <option>Active</option>
+
+                            <option>Pending</option>
+
+                            <option>Blocked</option>
+                        </select>
+                    </div>
+
+                    <!-- =================================================
+                             PASSWORD
+                        ================================================== -->
+
+                    <div class="col-md-6">
+                        <label class="form-label"> Password </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+
+                            <input type="password" class="form-control" placeholder="Enter password" />
+                        </div>
+                    </div>
+
+                    <!-- =================================================
+                             CONFIRM PASSWORD
+                        ================================================== -->
+
+                    <div class="col-md-6">
+                        <label class="form-label"> Confirm Password </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+
+                            <input type="password" class="form-control" placeholder="Confirm password" />
+                        </div>
+                    </div>
+
+                    <!-- =================================================
+                             ADDRESS
+                        ================================================== -->
+
+                    <div class="col-12">
+                        <label class="form-label"> Address </label>
+
+                        <textarea class="form-control" placeholder="Enter user address"></textarea>
+                    </div>
+
+                    <!-- =================================================
+                             BUTTONS
+                        ================================================== -->
+
+                    <div class="col-12">
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="reset" class="btn btn-light-custom">
+                                <i class="fa-solid fa-rotate-left me-1"></i>
+
+                                Reset
+                            </button>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-check me-1"></i>
+
+                                Create User
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+         </div>
