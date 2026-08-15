@@ -1,0 +1,232 @@
+ /* Base Styles */
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+ }
+
+ body {
+     background-color: #f8fafc;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     min-height: 100vh;
+     overflow: hidden;
+     position: relative;
+ }
+
+ /* E-commerce Background Elements */
+ .bg-elements {
+     position: absolute;
+     width: 100%;
+     height: 100%;
+     z-index: 0;
+     opacity: 0.15;
+ }
+
+ .bg-product {
+     position: absolute;
+     background-size: contain;
+     background-repeat: no-repeat;
+     opacity: 0.7;
+ }
+
+ .product-1 {
+     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="40" fill="%232c3e50" rx="5"/><rect x="35" y="20" width="30" height="10" fill="%2399a6b8"/></svg>');
+     width: 120px;
+     height: 120px;
+     top: 15%;
+     left: 10%;
+     animation: float 8s ease-in-out infinite;
+ }
+
+ .product-2 {
+     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="40" r="30" fill="%233498db"/><rect x="30" y="70" width="40" height="10" fill="%232c3e50" rx="3"/></svg>');
+     width: 150px;
+     height: 150px;
+     bottom: 20%;
+     right: 15%;
+     animation: float 10s ease-in-out infinite reverse;
+ }
+
+ .product-3 {
+     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50,10 L90,50 L50,90 L10,50 Z" fill="%23e74c3c"/><circle cx="50" cy="50" r="15" fill="%23f8fafc"/></svg>');
+     width: 100px;
+     height: 100px;
+     top: 60%;
+     left: 20%;
+     animation: float 7s ease-in-out infinite 2s;
+ }
+
+ /* Admin Login Container */
+ .admin-login {
+     background-color: white;
+     border-radius: 12px;
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+     width: 100%;
+     max-width: 420px;
+     padding: 40px;
+     position: relative;
+     z-index: 1;
+     border: 1px solid rgba(0, 0, 0, 0.05);
+ }
+
+ .admin-header {
+     text-align: center;
+     margin-bottom: 30px;
+     position: relative;
+ }
+
+ .admin-header h1 {
+     color: #1e293b;
+     font-size: 24px;
+     font-weight: 700;
+     margin-bottom: 5px;
+ }
+
+ .admin-header p {
+     color: #64748b;
+     font-size: 14px;
+     font-weight: 500;
+ }
+
+ .admin-header::after {
+     content: "";
+     display: block;
+     width: 50px;
+     height: 3px;
+     background: linear-gradient(to right, #3b82f6, #10b981);
+     margin: 15px auto 0;
+     border-radius: 3px;
+ }
+
+ /* Form Styles */
+ .form-group {
+     margin-bottom: 20px;
+ }
+
+ .form-group label {
+     display: block;
+     margin-bottom: 8px;
+     font-size: 13px;
+     font-weight: 600;
+     color: #475569;
+     text-transform: uppercase;
+     letter-spacing: 0.5px;
+ }
+
+ .form-control {
+     width: 100%;
+     padding: 12px 15px;
+     border: 1px solid #e2e8f0;
+     border-radius: 8px;
+     font-size: 14px;
+     transition: all 0.3s;
+     background-color: #f8fafc;
+ }
+
+ .form-control:focus {
+     border-color: #3b82f6;
+     outline: none;
+     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+     background-color: white;
+ }
+
+ /* Options Row */
+ .options-row {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 25px;
+ }
+
+ .remember-me {
+     display: flex;
+     align-items: center;
+ }
+
+ .remember-me input {
+     margin-right: 8px;
+     accent-color: #3b82f6;
+ }
+
+ .remember-me label {
+     font-size: 13px;
+     color: #64748b;
+     font-weight: 500;
+     text-transform: none;
+     letter-spacing: normal;
+ }
+
+ .forgot-password a {
+     color: #3b82f6;
+     font-size: 13px;
+     font-weight: 500;
+     text-decoration: none;
+     transition: color 0.2s;
+ }
+
+ .forgot-password a:hover {
+     color: #2563eb;
+     text-decoration: underline;
+ }
+
+
+
+ /* Login Button */
+ .login-btn {
+     width: 100%;
+     padding: 13px;
+     background: linear-gradient(to right, #3b82f6, #10b981);
+     color: white;
+     border: none;
+     border-radius: 8px;
+     font-size: 15px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 0.3s;
+     margin-bottom: 20px;
+ }
+
+ .login-btn:hover {
+     background: linear-gradient(to right, #2563eb, #059669);
+     transform: translateY(-2px);
+     box-shadow: 0 5px 10px rgba(59, 130, 246, 0.2);
+ }
+
+ .login-btn:active {
+     transform: translateY(0);
+ }
+
+ /* Footer Links */
+ .admin-footer {
+     text-align: center;
+     font-size: 13px;
+     color: #64748b;
+ }
+
+ .admin-footer a {
+     color: #3b82f6;
+     text-decoration: none;
+     font-weight: 500;
+     transition: color 0.2s;
+ }
+
+ .admin-footer a:hover {
+     color: #2563eb;
+     text-decoration: underline;
+ }
+
+ /* Animations */
+ @keyframes float {
+
+     0%,
+     100% {
+         transform: translateY(0) rotate(0deg);
+     }
+
+     50% {
+         transform: translateY(-15px) rotate(2deg);
+     }
+ }

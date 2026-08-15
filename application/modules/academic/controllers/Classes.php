@@ -22,7 +22,7 @@ public function index()
 
      $this->pagination->initialize([
             "total_rows" => $total_rows,
-            "per_page" => 1,
+            "per_page" => 10,
             "action" => base_url("academic/classes"),
             "page_field" => "page",
             "label" => "Class ",
@@ -32,7 +32,7 @@ public function index()
 
 
     $data["classes"] = $this->classes_model->get_classes($org_id, $active_branch_id,  $pagination["per_page"],
-            $pagination["offset"], $search, $status);
+    $pagination["offset"], $search, $status);
         $data = array_merge($data, $pagination);
         $data["sections"] = $this->section_model->get_active_sections($org_id, $active_branch_id);
 
@@ -95,8 +95,8 @@ public function store() {
             redirect('academic/classes');
         }
 
-        $data['active'] = "classes";
-        $data['title'] = "Edit Class"; 
+        $data['active'] = "classess";
+        $data['title'] = "Edit Classes"; 
         $data['sections'] = $this->section_model->get_active_sections($organization_id, $branch_id);
         $data['assigned_sections'] = $this->classes_model->get_assigned_section_ids($id);
 

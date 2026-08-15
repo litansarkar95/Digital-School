@@ -1,173 +1,108 @@
-<!doctype html>
-<html lang="en">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Labiba Digital School - Login Portal</title>
-      <!-- GOOGLE FONT -->
-      <link
-         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-         rel="stylesheet"
-      />
-      <!-- FONT AWESOME -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
- <!-- Style -->
+
     <link href="<?php echo base_url(); ?>static/assets/css/login.css" rel="stylesheet" />
-    
-   </head>
+  
 
-   <body>
-      <main class="login-page">
-         <!-- BACKGROUND SHAPES -->
-         <div class="bg-shape bg-shape-one"></div>
-         <div class="bg-shape bg-shape-two"></div>
+    <div class="login-page">
+        <!-- School Header -->
+        <section class="school-header">
+            <div class="dots dots-left"></div>
+            <div class="dots dots-right"></div>
+            
+            <div class="header-wave">
+                <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+                    <path fill="#fbf7f0" d="M0,90 C180,160 320,170 510,115 C700,60 800,55 990,105 C1160,150 1290,155 1440,75 L1440,200 L0,200 Z"></path>
+                </svg>
+            </div>
+        </section>
 
-         <!-- LOGIN WRAPPER -->
-         <div class="login-wrapper">
-            <!-- LEFT BRAND PANEL -->
-            <section class="login-brand-panel">
-               <div class="brand-logo">
-                  <div class="brand-logo-icon">
-                     <i class="fa-solid fa-graduation-cap"></i>
-                  </div>
-                  <div class="brand-logo-text">
-                     Labiba Digital
-                     <span>School</span>
-                  </div>
-               </div>
+        <!-- Login Content (Moved Higher Up) -->
+        <main class="login-content">
+            <div class="login-card">
+                <div class="login-icon">
+                    <i class="fa-regular fa-user"></i>
+                </div>
 
-               <div class="brand-content">
-                  <div class="brand-badge">
-                     <i class="fa-solid fa-shield-halved"></i>
-                     SMART EDUCATION PORTAL
-                  </div>
-                  <h1>
-                     Empowering education for a
-                     <span>brighter future.</span>
-                  </h1>
-                  <p>
-                     Welcome to Labiba Digital School portal. Teachers, students, and staff can securely log in to
-                     access classes, notices, grades, and administrative tools.
-                  </p>
+                <div class="login-title">
+                    <h2>Welcome Back!</h2>
+                    <p>Login to access your account</p>
+                </div>
 
-                  <div class="brand-features">
-                     <div class="brand-feature">
-                        <div class="feature-icon">
-                           <i class="fa-solid fa-chalkboard-user"></i>
+                <!-- Login Form -->
+                <form id="loginForm" action="<?php echo base_url(); ?>login" method="POST">
+                    <div class="form-group">
+                        <label for="username" class="form-label">Username / Email</label>
+                        <div class="input-box">
+                            <i class="fa-regular fa-user input-icon"></i>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Enter username or email" autocomplete="username" required />
                         </div>
-                        Teacher & Classroom Management
-                     </div>
-                     <div class="brand-feature">
-                        <div class="feature-icon">
-                           <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-box">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" autocomplete="current-password" required />
+                            <button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
                         </div>
-                        Student Dashboard & Results
-                     </div>
-                     <div class="brand-feature">
-                        <div class="feature-icon">
-                           <i class="fa-solid fa-users-gear"></i>
-                        </div>
-                        Staff & Administrative Access
-                     </div>
-                  </div>
-               </div>
+                    </div>
 
-               <div class="brand-footer">
-                  <p>&copy; 2026 Labiba Digital School. All rights reserved.</p>
-               </div>
-
-               <div class="brand-decoration"></div>
-            </section>
-
-            <!-- RIGHT LOGIN PANEL -->
-            <section class="login-form-panel">
-               <div class="login-form-wrapper">
-                  <div class="form-header">
-                     <h2>Welcome Back</h2>
-                     <p>Enter your User ID / Username and Password to sign in.</p>
-                  </div>
-
-                  <!-- PHP ERROR MESSAGE DISPLAY -->
-                  <?php if($this->session->userdata('error')): ?>
-                  <div class="alert-error">
-                     <i class="fa-solid fa-circle-exclamation"></i>
-                     <span><?php 
-                        echo $this->session->userdata('error'); 
-                        $this->session->unset_userdata('error');
-                    ?></span>
-                  </div>
-                  <?php endif; ?>
-
-                  <form action="<?php echo base_url(); ?>login" method="POST">
-                     <!-- USERNAME / ID -->
-                     <div class="form-group">
-                        <label class="form-label" for="username">User ID / Username</label>
-                        <div class="input-wrapper">
-                           <i class="fa-regular fa-user input-icon"></i>
-                           <input
-                              type="text"
-                              id="username"
-                              name="username"
-                              class="form-input"
-                              placeholder="Enter your ID or username"
-                              autocomplete="username"
-                              required
-                           />
-                        </div>
-                     </div>
-
-                     <!-- PASSWORD -->
-                     <div class="form-group">
-                        <label class="form-label" for="password">Password</label>
-                        <div class="input-wrapper">
-                           <i class="fa-solid fa-lock input-icon"></i>
-                           <input
-                              type="password"
-                              id="password"
-                              name="password"
-                              class="form-input"
-                              placeholder="Enter your password"
-                              autocomplete="current-password"
-                              required
-                           />
-                           <button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password">
-                              <i class="fa-regular fa-eye" id="passwordIcon"></i>
-                           </button>
-                        </div>
-                     </div>
-
-                     <!-- OPTIONS -->
-                     <div class="form-options">
+                    <div class="login-options">
                         <label class="remember-me">
-                           <input type="checkbox" name="remember" />
-                           <span>Remember me</span>
+                            <input type="checkbox" name="remember" value="1" />
+                            <span>Remember me</span>
                         </label>
-                        <a href="#" class="forgot-password">Forgot password?</a>
-                     </div>
+                        <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+                    </div>
 
-                     <!-- LOGIN BUTTON -->
-                     <button type="submit" class="login-btn">
-                        <span>Sign In</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                     </button>
-                  </form>
-               </div>
-            </section>
-         </div>
-      </main>
+                    <button type="submit" class="login-button" id="loginButton">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span>LOGIN</span>
+                    </button>
+                </form>
 
-      <!-- PASSWORD TOGGLE SCRIPT -->
-      <script>
-         const passwordInput = document.getElementById("password");
-         const passwordToggle = document.getElementById("passwordToggle");
-         const passwordIcon = document.getElementById("passwordIcon");
+                <div class="divider">OR</div>
 
-         passwordToggle.addEventListener("click", function () {
-            const isPassword = passwordInput.type === "password";
-            passwordInput.type = isPassword ? "text" : "password";
-            passwordIcon.className = isPassword ? "fa-regular fa-eye-slash" : "fa-regular fa-eye";
-            passwordToggle.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
-         });
-      </script>
-   </body>
-</html>
+                <a href="index.html" class="back-button">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>Back to Website</span>
+                </a>
+            </div>
+        </main>
+    </div>
+
+ <script>
+        const passwordInput = document.getElementById("password");
+        const passwordToggle = document.getElementById("passwordToggle");
+
+        passwordToggle.addEventListener("click", function () {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                this.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
+                this.setAttribute("aria-label", "Hide password");
+            } else {
+                passwordInput.type = "password";
+                this.innerHTML = '<i class="fa-regular fa-eye"></i>';
+                this.setAttribute("aria-label", "Show password");
+            }
+        });
+
+        const loginForm = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+
+        loginForm.addEventListener("submit", function (e) {
+           e.preventDefault();
+            
+            const originalHTML = loginButton.innerHTML;
+            loginButton.disabled = true;
+            loginButton.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <span>PLEASE WAIT...</span>
+            `;
+
+            setTimeout(() => {
+                loginForm.submit();
+            }, 300);
+        });
+    </script>

@@ -20,8 +20,9 @@ class Login extends MX_Controller {
               $data = array();
                 $data['active'] = "authentication";
                     $data['title'] = "Authentication"; 
-        
-            $this->load->view('login', $data); 
+         $data['content'] = $this->load->view("login", $data, TRUE);
+    $this->load->view('frontend/layout/master', $data);
+           // $this->load->view('login', $data); 
         } else {
             $username = $this->security->xss_clean($this->input->post("username"));
             $password = $this->security->xss_clean($this->input->post("password"));
@@ -80,7 +81,7 @@ class Login extends MX_Controller {
                         array('id' => $user->id)
                     );
 
-                    $this->session->set_flashdata('success', "Welcome Back " . $getUser['name']);
+                    //$this->session->set_flashdata('success', "Welcome Back " . $getUser['name']);
 
 
 
@@ -92,7 +93,7 @@ class Login extends MX_Controller {
                             redirect(base_url() . "dashboard/systemadmin", "refresh");
                             
                         } else {
-                            redirect(base_url() . "dashboard", "refresh");
+                           redirect(base_url() . "dashboard", "refresh");
                         }
                     }
 

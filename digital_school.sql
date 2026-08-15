@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 11, 2026 at 01:05 PM
+-- Generation Time: Aug 15, 2026 at 01:04 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,32 @@ SET time_zone = "+00:00";
 --
 -- Database: `digital_school`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `academic_years`
+--
+
+CREATE TABLE `academic_years` (
+  `id` int(11) NOT NULL,
+  `organization_id` int(11) NOT NULL,
+  `branch_id` int(11) DEFAULT NULL,
+  `year_name` varchar(50) NOT NULL,
+  `start_date` int(11) NOT NULL,
+  `end_date` int(11) NOT NULL,
+  `is_current` tinyint(1) DEFAULT 0,
+  `status` enum('active','inactive') DEFAULT 'active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `academic_years`
+--
+
+INSERT INTO `academic_years` (`id`, `organization_id`, `branch_id`, `year_name`, `start_date`, `end_date`, `is_current`, `status`, `created_at`) VALUES
+(2, 1, 1, '2026', 1767808800, 1796666400, 1, 'active', '2026-08-12 08:18:36'),
+(3, 1, 1, '2025', 1785520800, 1786471200, 0, 'active', '2026-08-12 08:21:22');
 
 -- --------------------------------------------------------
 
@@ -75,7 +101,9 @@ CREATE TABLE `classes` (
 --
 
 INSERT INTO `classes` (`id`, `organization_id`, `branch_id`, `class`, `is_active`, `created_at`, `updated_at`) VALUES
-(2, 1, 1, 'Two', 1, '2026-08-11 10:49:42', '2026-08-11 10:49:42');
+(2, 1, 1, 'Two', 1, '2026-08-11 10:49:42', '2026-08-11 10:49:42'),
+(3, 1, 1, 'One', 1, '2026-08-13 04:33:35', '2026-08-13 04:33:35'),
+(4, 1, 1, 'Three', 1, '2026-08-13 04:33:49', '2026-08-13 04:33:49');
 
 -- --------------------------------------------------------
 
@@ -101,7 +129,42 @@ CREATE TABLE `class_sections` (
 
 INSERT INTO `class_sections` (`id`, `organization_id`, `branch_id`, `class_id`, `section_id`, `teacher_id`, `is_active`, `created_at`, `updated_at`) VALUES
 (5, 1, 1, 2, 1, NULL, 1, '2026-08-11 10:59:11', '2026-08-11 10:59:11'),
-(6, 1, 1, 2, 2, NULL, 1, '2026-08-11 10:59:11', '2026-08-11 10:59:11');
+(6, 1, 1, 2, 2, NULL, 1, '2026-08-11 10:59:11', '2026-08-11 10:59:11'),
+(9, 1, 1, 3, 1, NULL, 1, '2026-08-13 04:33:35', '2026-08-13 04:33:35'),
+(10, 1, 1, 3, 2, NULL, 1, '2026-08-13 04:33:35', '2026-08-13 04:33:35'),
+(11, 1, 1, 4, 1, NULL, 1, '2026-08-13 04:33:49', '2026-08-13 04:33:49'),
+(12, 1, 1, 4, 2, NULL, 1, '2026-08-13 04:33:49', '2026-08-13 04:33:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `guardians`
+--
+
+CREATE TABLE `guardians` (
+  `id` int(11) NOT NULL,
+  `organization_id` int(11) NOT NULL,
+  `guardian_is` varchar(50) NOT NULL DEFAULT 'Father',
+  `father_name` varchar(100) DEFAULT NULL,
+  `father_phone` varchar(100) DEFAULT NULL,
+  `father_occupation` varchar(100) DEFAULT NULL,
+  `mother_name` varchar(100) DEFAULT NULL,
+  `mother_phone` varchar(100) DEFAULT NULL,
+  `mother_occupation` varchar(100) DEFAULT NULL,
+  `guardian_name` varchar(100) DEFAULT NULL,
+  `guardian_relation` varchar(100) DEFAULT NULL,
+  `guardian_phone` varchar(100) DEFAULT NULL,
+  `present_address` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `guardians`
+--
+
+INSERT INTO `guardians` (`id`, `organization_id`, `guardian_is`, `father_name`, `father_phone`, `father_occupation`, `mother_name`, `mother_phone`, `mother_occupation`, `guardian_name`, `guardian_relation`, `guardian_phone`, `present_address`, `created_at`) VALUES
+(1, 1, 'Father', 'x', 's', 's', 's', 's', 's', '', '', '', 's', '2026-08-12 09:52:23'),
+(2, 1, 'Father', '33', '334', '445', '55', '55', '4', '3', 'Father', '334', '44', '2026-08-15 08:54:35');
 
 -- --------------------------------------------------------
 
@@ -135,7 +198,7 @@ CREATE TABLE `login_credential` (
 
 INSERT INTO `login_credential` (`id`, `organization_id`, `branch_id`, `user_id`, `username`, `email`, `phone_no`, `password`, `role`, `otp_code`, `otp_expiry`, `remember_token`, `active`, `last_login`, `last_login_ip`, `created_at`, `updated_at`) VALUES
 (1, 0, 0, 1, 'system', NULL, NULL, '$2y$10$sYVcvML0jteteUdNfzNCyephsQ.KQxvyXXXNMEWNMHV8UoZLAxf1i', 1, NULL, NULL, NULL, 1, '2026-08-10 16:19:45', NULL, '2026-07-13 20:16:59', '2026-08-10 16:19:45'),
-(2, 1, 1, 2, 'admin', NULL, NULL, '$2y$10$sYVcvML0jteteUdNfzNCyephsQ.KQxvyXXXNMEWNMHV8UoZLAxf1i', 2, NULL, NULL, NULL, 1, '2026-08-11 14:50:16', NULL, '2026-07-13 20:16:59', '2026-08-11 14:50:16');
+(2, 1, 1, 2, 'admin', NULL, NULL, '$2y$10$sYVcvML0jteteUdNfzNCyephsQ.KQxvyXXXNMEWNMHV8UoZLAxf1i', 2, NULL, NULL, NULL, 1, '2026-08-15 14:15:06', NULL, '2026-07-13 20:16:59', '2026-08-15 14:15:06');
 
 -- --------------------------------------------------------
 
@@ -218,9 +281,68 @@ CREATE TABLE `staff` (
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `students`
+--
+
+CREATE TABLE `students` (
+  `id` int(11) NOT NULL,
+  `organization_id` int(11) NOT NULL,
+  `branch_id` int(11) NOT NULL,
+  `guardian_id` int(11) NOT NULL,
+  `admission_no` varchar(100) NOT NULL,
+  `firstname` varchar(100) NOT NULL,
+  `lastname` varchar(100) DEFAULT NULL,
+  `dob` date DEFAULT NULL,
+  `gender` varchar(100) DEFAULT NULL,
+  `blood_group` varchar(200) NOT NULL,
+  `is_active` varchar(255) DEFAULT 'yes',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`id`, `organization_id`, `branch_id`, `guardian_id`, `admission_no`, `firstname`, `lastname`, `dob`, `gender`, `blood_group`, `is_active`, `created_at`) VALUES
+(1, 1, 1, 1, '1231', 's', 's', '2026-08-12', 'Male', '', 'yes', '2026-08-12 09:52:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_sessions`
+--
+
+CREATE TABLE `student_sessions` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `organization_id` int(11) NOT NULL,
+  `branch_id` int(11) NOT NULL,
+  `academic_year_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  `section_id` int(11) NOT NULL,
+  `roll_no` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `student_sessions`
+--
+
+INSERT INTO `student_sessions` (`id`, `student_id`, `organization_id`, `branch_id`, `academic_year_id`, `class_id`, `section_id`, `roll_no`, `created_at`) VALUES
+(1, 1, 1, 1, 2, 2, 1, 1, '2026-08-12 09:52:23');
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `academic_years`
+--
+ALTER TABLE `academic_years`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `branch`
@@ -242,6 +364,12 @@ ALTER TABLE `class_sections`
   ADD KEY `class_id` (`class_id`),
   ADD KEY `section_id` (`section_id`),
   ADD KEY `teacher_id` (`teacher_id`);
+
+--
+-- Indexes for table `guardians`
+--
+ALTER TABLE `guardians`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `login_credential`
@@ -268,8 +396,29 @@ ALTER TABLE `staff`
   ADD UNIQUE KEY `nid_no` (`nid_no`);
 
 --
+-- Indexes for table `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `admission_no` (`admission_no`),
+  ADD KEY `guardian_id` (`guardian_id`);
+
+--
+-- Indexes for table `student_sessions`
+--
+ALTER TABLE `student_sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `student_id` (`student_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `academic_years`
+--
+ALTER TABLE `academic_years`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `branch`
@@ -281,13 +430,19 @@ ALTER TABLE `branch`
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `class_sections`
 --
 ALTER TABLE `class_sections`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `guardians`
+--
+ALTER TABLE `guardians`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `login_credential`
@@ -306,6 +461,34 @@ ALTER TABLE `sections`
 --
 ALTER TABLE `staff`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `students`
+--
+ALTER TABLE `students`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `student_sessions`
+--
+ALTER TABLE `student_sessions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `students`
+--
+ALTER TABLE `students`
+  ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`guardian_id`) REFERENCES `guardians` (`id`);
+
+--
+-- Constraints for table `student_sessions`
+--
+ALTER TABLE `student_sessions`
+  ADD CONSTRAINT `student_sessions_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

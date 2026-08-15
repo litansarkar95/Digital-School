@@ -244,14 +244,14 @@ class MY_Pagination
                     class="page-btn page-disabled"
                     disabled
                 >
-                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa fa-chevron-left"></i>
                 </button>
 
             ';
         } else {
             $html .= $this->page_form(
                 $this->current_page - 1,
-                '<i class="fa-solid fa-chevron-left"></i>'
+                '<i class="fa fa-chevron-left"></i>'
             );
         }
         foreach ($this->page_range() as $page) {
@@ -282,14 +282,14 @@ class MY_Pagination
                     class="page-btn page-disabled"
                     disabled
                 >
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa fa-chevron-right"></i>
                 </button>
 
             ';
         } else {
             $html .= $this->page_form(
                 $this->current_page + 1,
-                '<i class="fa-solid fa-chevron-right"></i>'
+                '<i class="fa fa-chevron-right"></i>'
             );
         }
 
