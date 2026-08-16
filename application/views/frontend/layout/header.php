@@ -80,15 +80,15 @@
 
                             <ul class="dropdown-menu-custom">
                                 <li>
-                                    <a href="#"> বিদ্যালয়ের ইতিহাস </a>
+                                    <a href="<?php echo base_url(); ?>about-us"> বিদ্যালয়ের ইতিহাস </a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> প্রধান শিক্ষকের বাণী </a>
+                                    <a href="<?php echo base_url(); ?>messages"> প্রধান শিক্ষকের বাণী </a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> লক্ষ্য ও উদ্দেশ্য </a>
+                                    <a href="<?php echo base_url(); ?>"> লক্ষ্য ও উদ্দেশ্য </a>
                                 </li>
 
                                 <li>
@@ -116,7 +116,7 @@
                                 </li> -->
 
                                 <li>
-                                    <a href="#"> বিদ্যালয় পরিচালনা কমিটি </a>
+                                    <a href="<?php echo base_url(); ?>governing-body"> বিদ্যালয় পরিচালনা কমিটি </a>
                                 </li>
                             </ul>
                         </li>
@@ -131,23 +131,23 @@
 
                             <ul class="dropdown-menu-custom">
                                 <li>
-                                    <a href="#"> ক্লাস রুটিন </a>
+                                    <a href="<?php echo base_url(); ?>class-routine"> ক্লাস রুটিন </a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> পরীক্ষার রুটিন </a>
+                                    <a href="<?php echo base_url(); ?>exam-routine"> পরীক্ষার রুটিন </a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> সিলেবাস </a>
+                                    <a href="<?php echo base_url(); ?>"> সিলেবাস </a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> ফলাফল </a>
+                                    <a href="<?php echo base_url(); ?>result"> ফলাফল </a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> একাডেমিক ক্যালেন্ডার </a>
+                                    <a href="<?php echo base_url(); ?>academic-calendar"> একাডেমিক ক্যালেন্ডার </a>
                                 </li>
                             </ul>
                         </li>
@@ -162,19 +162,19 @@
 
                             <ul class="dropdown-menu-custom">
                                 <li>
-                                    <a href="#"> ভর্তি বিজ্ঞপ্তি </a>
+                                    <a href="<?php echo base_url(); ?>admission"> ভর্তি বিজ্ঞপ্তি </a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> অনলাইন ভর্তি </a>
+                                    <a href="<?php echo base_url(); ?>online-admission"> অনলাইন ভর্তি </a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> ভর্তি তথ্য </a>
+                                    <a href="<?php echo base_url(); ?>"> ভর্তি তথ্য </a>
                                 </li>
 
                                 <li>
-                                    <a href="#"> ভর্তি ফলাফল </a>
+                                    <a href="<?php echo base_url(); ?>"> ভর্তি ফলাফল </a>
                                 </li>
                             </ul>
                         </li>
@@ -226,9 +226,10 @@
         <div class="mobile-menu">
             <div class="mobile-menu-head">
                 <div class="mobile-brand">
-                    <img src="https://placehold.co/100x100/0b5d4b/ffffff?text=GVHS" alt="Logo" />
+                     <img src="<?php echo base_url(); ?>static/assets/img/logo.png" class="" alt="School Logo" />
+                    <!-- <img src="https://placehold.co/100x100/0b5d4b/ffffff?text=GVHS" alt="Logo" />
 
-                    <strong> গ্রিন ভ্যালি হাই স্কুল </strong>
+                    <strong> গ্রিন ভ্যালি হাই স্কুল </strong> -->
                 </div>
 
                 <button class="mobile-close" id="mobileMenuClose">
@@ -239,7 +240,7 @@
             <nav class="mobile-nav">
                 <ul>
                     <li>
-                        <a href="#"> হোম </a>
+                        <a href="<?php echo base_url(); ?>"> হোম </a>
                     </li>
 
                     <!-- About -->
@@ -252,19 +253,23 @@
               </a>
 
                         <ul class="mobile-submenu">
-                            <li>
-                                <a href="#"> বিদ্যালয়ের ইতিহাস </a>
-                            </li>
+                             <li>
+                                    <a href="<?php echo base_url(); ?>about-us"> বিদ্যালয়ের ইতিহাস </a>
+                                </li>
 
-                            <li>
-                                <a href="#"> প্রধান শিক্ষকের বাণী </a>
-                            </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>messages"> প্রধান শিক্ষকের বাণী </a>
+                                </li>
 
-                            <li>
-                                <a href="#"> লক্ষ্য ও উদ্দেশ্য </a>
-                            </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>"> লক্ষ্য ও উদ্দেশ্য </a>
+                                </li>
 
-                            <li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>teachers-and-staff">  শিক্ষকবৃন্দ </a>
+                                </li>
+
+                            <!-- <li>
                                 <a href="javascript:void(0)" class="mobile-parent">
                                     <i class="fa-solid fa-plus"></i>
                                 </a>
@@ -281,7 +286,7 @@
                                         <a href="#"> কর্মচারীবৃন্দ </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> -->
 
                             <li>
                                 <a href="#"> পরিচালনা কমিটি </a>
@@ -300,24 +305,24 @@
 
                         <ul class="mobile-submenu">
                             <li>
-                                <a href="#"> ক্লাস রুটিন </a>
-                            </li>
+                                    <a href="<?php echo base_url(); ?>class-routine"> ক্লাস রুটিন </a>
+                                </li>
 
-                            <li>
-                                <a href="#"> পরীক্ষার রুটিন </a>
-                            </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>exam-routine"> পরীক্ষার রুটিন </a>
+                                </li>
 
-                            <li>
-                                <a href="#"> সিলেবাস </a>
-                            </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>"> সিলেবাস </a>
+                                </li>
 
-                            <li>
-                                <a href="#"> ফলাফল </a>
-                            </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>result"> ফলাফল </a>
+                                </li>
 
-                            <li>
-                                <a href="#"> একাডেমিক ক্যালেন্ডার </a>
-                            </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>academic-calendar"> একাডেমিক ক্যালেন্ডার </a>
+                                </li>
                         </ul>
                     </li>
 
@@ -332,25 +337,25 @@
 
                         <ul class="mobile-submenu">
                             <li>
-                                <a href="#"> ভর্তি বিজ্ঞপ্তি </a>
-                            </li>
+                                    <a href="<?php echo base_url(); ?>admission"> ভর্তি বিজ্ঞপ্তি </a>
+                                </li>
 
-                            <li>
-                                <a href="#"> অনলাইন ভর্তি </a>
-                            </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>online-admission"> অনলাইন ভর্তি </a>
+                                </li>
 
-                            <li>
-                                <a href="#"> ভর্তি তথ্য </a>
-                            </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>"> ভর্তি তথ্য </a>
+                                </li>
 
-                            <li>
-                                <a href="#"> ভর্তি ফলাফল </a>
-                            </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>"> ভর্তি ফলাফল </a>
+                                </li>
                         </ul>
                     </li>
 
                     <li>
-                        <a href="#"> নোটিশ </a>
+                        <a href="<?php echo base_url(); ?>"> নোটিশ </a>
                     </li>
 
                     <!-- Gallery -->
@@ -364,7 +369,7 @@
 
                         <ul class="mobile-submenu">
                             <li>
-                                <a href="#"> ফটো গ্যালারি </a>
+                                <a href="<?php echo base_url(); ?>gallery"> ফটো গ্যালারি </a>
                             </li>
 
                             <li>
@@ -376,7 +381,7 @@
                         <a href="<?php echo base_url(); ?>login"> লগইন </a>
                     </li>
                     <li>
-                        <a href="<?php echo base_url(); ?>"> যোগাযোগ </a>
+                        <a href="<?php echo base_url(); ?>contact-us"> যোগাযোগ </a>
                     </li>
                 </ul>
             </nav>
