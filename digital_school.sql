@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2026 at 01:04 PM
+-- Generation Time: Aug 18, 2026 at 01:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -138,6 +138,55 @@ INSERT INTO `class_sections` (`id`, `organization_id`, `branch_id`, `class_id`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `exam`
+--
+
+CREATE TABLE `exam` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `organization_id` int(11) NOT NULL,
+  `branch_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `examGroup` varchar(100) DEFAULT NULL,
+  `examDate` int(11) NOT NULL,
+  `sessionyearID` int(11) NOT NULL,
+  `note` text DEFAULT NULL,
+  `sortOrder` int(11) NOT NULL DEFAULT 0,
+  `status` int(11) NOT NULL,
+  `created_date` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `exam`
+--
+
+INSERT INTO `exam` (`id`, `organization_id`, `branch_id`, `name`, `examGroup`, `examDate`, `sessionyearID`, `note`, `sortOrder`, `status`, `created_date`) VALUES
+(2, 1, 1, 'mId exam', '111', 1786989600, 2, '111', 111, 1, 1787050774),
+(3, 1, 1, 'dr', 'ee', 1786989600, 2, 'eee', 0, 1, 1787050966);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exam_others`
+--
+
+CREATE TABLE `exam_others` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `organization_id` int(11) NOT NULL,
+  `branch_id` int(11) NOT NULL,
+  `examID` int(11) UNSIGNED NOT NULL,
+  `otherExamID` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `exam_others`
+--
+
+INSERT INTO `exam_others` (`id`, `organization_id`, `branch_id`, `examID`, `otherExamID`) VALUES
+(1, 1, 1, 3, 2);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `guardians`
 --
 
@@ -198,7 +247,37 @@ CREATE TABLE `login_credential` (
 
 INSERT INTO `login_credential` (`id`, `organization_id`, `branch_id`, `user_id`, `username`, `email`, `phone_no`, `password`, `role`, `otp_code`, `otp_expiry`, `remember_token`, `active`, `last_login`, `last_login_ip`, `created_at`, `updated_at`) VALUES
 (1, 0, 0, 1, 'system', NULL, NULL, '$2y$10$sYVcvML0jteteUdNfzNCyephsQ.KQxvyXXXNMEWNMHV8UoZLAxf1i', 1, NULL, NULL, NULL, 1, '2026-08-10 16:19:45', NULL, '2026-07-13 20:16:59', '2026-08-10 16:19:45'),
-(2, 1, 1, 2, 'admin', NULL, NULL, '$2y$10$sYVcvML0jteteUdNfzNCyephsQ.KQxvyXXXNMEWNMHV8UoZLAxf1i', 2, NULL, NULL, NULL, 1, '2026-08-15 14:15:06', NULL, '2026-07-13 20:16:59', '2026-08-15 14:15:06');
+(2, 1, 1, 2, 'admin', NULL, NULL, '$2y$10$sYVcvML0jteteUdNfzNCyephsQ.KQxvyXXXNMEWNMHV8UoZLAxf1i', 2, NULL, NULL, NULL, 1, '2026-08-18 16:02:14', NULL, '2026-07-13 20:16:59', '2026-08-18 16:02:14');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `logs`
+--
+
+CREATE TABLE `logs` (
+  `id` int(11) NOT NULL,
+  `organization_id` int(11) NOT NULL,
+  `branch_id` int(11) NOT NULL,
+  `message` text DEFAULT NULL,
+  `record_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `action` varchar(50) DEFAULT NULL,
+  `ip_address` varchar(50) DEFAULT NULL,
+  `platform` varchar(50) DEFAULT NULL,
+  `agent` varchar(50) DEFAULT NULL,
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_at` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `logs`
+--
+
+INSERT INTO `logs` (`id`, `organization_id`, `branch_id`, `message`, `record_id`, `user_id`, `action`, `ip_address`, `platform`, `agent`, `time`, `created_at`) VALUES
+(1, 1, 1, 'New Record inserted On exam id 2', 2, 2, 'Insert', '::1', 'Windows 10', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb', '2026-08-18 10:59:34', '2026-08-18'),
+(2, 1, 1, 'New Record inserted On exam id 3', 3, 2, 'Insert', '::1', 'Windows 10', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb', '2026-08-18 11:02:46', '2026-08-18'),
+(3, 1, 1, 'New Record inserted On exam_others id 1', 1, 2, 'Insert', '::1', 'Windows 10', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb', '2026-08-18 11:02:46', '2026-08-18');
 
 -- --------------------------------------------------------
 
@@ -366,6 +445,20 @@ ALTER TABLE `class_sections`
   ADD KEY `teacher_id` (`teacher_id`);
 
 --
+-- Indexes for table `exam`
+--
+ALTER TABLE `exam`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `exam_others`
+--
+ALTER TABLE `exam_others`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `examID` (`examID`),
+  ADD KEY `otherExamID` (`otherExamID`);
+
+--
 -- Indexes for table `guardians`
 --
 ALTER TABLE `guardians`
@@ -379,6 +472,12 @@ ALTER TABLE `login_credential`
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `phone_no` (`phone_no`);
+
+--
+-- Indexes for table `logs`
+--
+ALTER TABLE `logs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `sections`
@@ -439,6 +538,18 @@ ALTER TABLE `class_sections`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT for table `exam`
+--
+ALTER TABLE `exam`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `exam_others`
+--
+ALTER TABLE `exam_others`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `guardians`
 --
 ALTER TABLE `guardians`
@@ -449,6 +560,12 @@ ALTER TABLE `guardians`
 --
 ALTER TABLE `login_credential`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `logs`
+--
+ALTER TABLE `logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sections`
