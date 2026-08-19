@@ -38,7 +38,7 @@
                      </ul>
                   </li>
                      <?php 
-                     $active_academic = ['classess', 'sections', 'academic_years'];
+                     $active_academic = ['classess', 'sections','subject','subjectGroup', 'academic_years'];
                      $is_active = in_array($active, $active_academic);
                      ?>
 
@@ -58,6 +58,12 @@
                         <li class="<?php echo ($active == 'sections') ? 'activeColor' : ''; ?>">
                               <a href="<?php echo base_url(); ?>academic/sections">Sections</a>
                         </li>
+                          <li class="<?php echo ($active == 'subject') ? 'activeColor' : ''; ?>">
+                              <a href="<?php echo base_url(); ?>academic/subject/create">Subject</a>
+                        </li>
+                           <li class="<?php echo ($active == 'subjectGroup') ? 'activeColor' : ''; ?>">
+                              <a href="<?php echo base_url(); ?>academic/subjectGroup/create">Subject Group</a>
+                        </li>
                         
                         <li class="<?php echo ($active == 'academic_years') ? 'activeColor' : ''; ?>">
                               <a href="<?php echo base_url(); ?>academic/academic_years">Academic Year</a>
@@ -67,7 +73,7 @@
                   </li>
 
                     <?php 
-                     $active_academic = ['exam', 'create_student'];
+                     $active_academic = ['exam', 'exam_grade','exam_schedule'];
                      $is_active = in_array($active, $active_academic);
                      ?>
 
@@ -84,11 +90,11 @@
                               <a href="<?php echo base_url(); ?>exam"> Exam </a>
                         </li>
                         
-                        <li class="<?php echo ($active == 'create_student') ? 'activeColor' : ''; ?>">
+                        <li class="<?php echo ($active == 'exam_schedule') ? 'activeColor' : ''; ?>">
                               <a href="<?php echo base_url(); ?>student/create">Exam Schedule</a>
                         </li>
-                          <li class="<?php echo ($active == 'create_student') ? 'activeColor' : ''; ?>">
-                              <a href="<?php echo base_url(); ?>student/create">Grade</a>
+                          <li class="<?php echo ($active == 'exam_grade') ? 'activeColor' : ''; ?>">
+                              <a href="<?php echo base_url(); ?>exam/grade">Grade</a>
                         </li>
                            <li class="<?php echo ($active == 'create_student') ? 'activeColor' : ''; ?>">
                               <a href="<?php echo base_url(); ?>student/create"> Exam Attendance</a>

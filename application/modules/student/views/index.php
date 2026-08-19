@@ -210,8 +210,8 @@
                     <label>Status</label>
                      <select name="status" class="form-control select2" style="width:100%" onchange="this.form.submit()">
                            <option value="">All Status</option>
-                <option value="yes" <?= $this->input->get('status') === 'yes' ? 'selected' : ''; ?>>Active</option>
-                <option value="no" <?= $this->input->get('status') === 'no' ? 'selected' : ''; ?>>Inactive</option>
+                <option value="1" <?= $this->input->get('status') === 1 ? 'selected' : ''; ?>>Active</option>
+                <option value="0" <?= $this->input->get('status') === 0 ? 'selected' : ''; ?>>Inactive</option>
                     </select>
 
                    
@@ -245,7 +245,7 @@
         <thead>
             <tr>
                 <th width="60" class="text-center">#</th>
-               
+               <th>Photo </th>
                 <th>Student Info </th>
                 <th>Admission No </th>
                 <th>Class & Section</th>
@@ -259,7 +259,18 @@
             <tr>
              
                   <td data-label="#" class="text-center"><?php echo $key + 1; ?></td>
-                <td data-label="Student Info">
+                  <td data-label="Student Info">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                        
+                            <div style="width: 40px; height: 40px;overflow: hidden; background: #f1f1f1; border: 1px solid #ddd; flex-shrink: 0;">
+                                <?php 
+                                    $student_img = !empty($row->student_image) ? base_url('uploads/students/' . $row->student_image) : base_url('uploads/default.png'); 
+                                ?>
+                                <img src="<?= $student_img; ?>" alt="Student Photo" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        </div>
+                    </td>
+                       <td data-label="Student Info">
                    <span ><?= html_escape($row->firstname . ' ' . $row->lastname); ?></span><br>
                  
                                     <small class="text-muted">
@@ -286,7 +297,7 @@
                 </td>
               
                     <td data-label="<?php echo display('status'); ?>"  >
-                                <?php if($row->is_active == 'yes'): ?>
+                                <?php if($row->is_active == 1): ?>
                                     <span class="status-badge badge-active">
                                         <span class="status-dot dot-active"></span>
                                         Active

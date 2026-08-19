@@ -65,5 +65,31 @@ public function count_exams($org_id, $branch_id, $search = null, $sessionyear = 
         return $query->result();
     }
 
+public function count_exam_grade($org_id, $branch_id) {
+        $this->db->from('grade');
+        $this->db->where('organization_id', $org_id);
+        
+        if (!empty($branch_id)) {
+            $this->db->where('branch_id', $branch_id);
+        }
+       
+        return $this->db->count_all_results();
+    }
 
+       public function get_exams_grade($org_id, $branch_id, $limit, $start) {
+        $this->db->select('*');
+        $this->db->from('grade');
+        $this->db->where('organization_id', $org_id);
+        
+        if (!empty($branch_id)) {
+            $this->db->where('branch_id', $branch_id);
+        }
+
+        $this->db->order_by('sortOrder', 'ASC');
+        $this->db->order_by('id', 'DESC');
+        $this->db->limit($limit, $start);
+
+        $query = $this->db->get();
+        return $query->result();
+    }
 }

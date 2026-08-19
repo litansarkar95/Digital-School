@@ -65,7 +65,7 @@
                         </div>
                            <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="firstname">Last Name</label>
+                                <label for="lastname">Last Name</label>
                                 <input type="text" class="form-control" id="lastname" value="" name="lastname">
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                                 <input type="text" class="form-control" id="admission_no" value="" name="admission_no">
                             </div>
                         </div>
-                          
+                         
 
                         <div class="col-sm-3">
                             <div class="form-group">
@@ -110,6 +110,27 @@
                     </div>
                      </div>
 
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="student_image">Student Photo</label>
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                
+                                    <div style="width: 60px; height: 60px; border: 1px dashed #ccc; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: #f9f9f9; overflow: hidden; position: relative;">
+                                        <img id="preview_img" src="#" alt="Preview" style="max-width: 100%; max-height: 100%; display: none;">
+                                        <i id="preview_icon" class="fa fa-user" style="font-size: 24px; color: #aaa;"></i>
+                                    </div>
+                                    
+                                    <div style="flex: 1;">
+                                        <label for="student_image" class="btn btn-default btn-sm" style="background-color: #f4f4f4; border-color: #ddd; color: #444; cursor: pointer; margin-bottom: 5px; display: inline-flex; align-items: center; gap: 6px;">
+                                            <i class="fa fa-paperclip"></i> Attach Image
+                                        </label>
+                                        <input type="file" class="form-control" id="student_image" name="student_image" accept="image/*" style="display: none;">
+                                        <span id="file_name_display" style="display: block; font-size: 12px; color: #666; margin-top: 2px;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
        
                         <!-- INVOICE -->
@@ -129,7 +150,7 @@
     </div>
 </div>
            
-                        <div class="col-sm-4">
+                            <div class="col-sm-4">
                             <div class="form-group">
                                 <label for="father_name">Father's Name <span class="required">*</span></label>
                                 <input type="text" name="father_name" id="father_name" class="form-control">
@@ -194,7 +215,7 @@
                         <!-- PAYMENT -->
                         <div class="col-sm-12 section-title"> Academic Session & Class Assign</div>
 
-                      
+                     
 
                         <div class="col-sm-3">
                             <div class="form-group">
@@ -244,7 +265,7 @@
 
                             <div class="pull-right action-group">
 
-                              
+                                
                                 <button class="btn btn-success btn-submit" style="margin-left:10px;">
                                     <i class="fa fa-check"></i> Submit 
                                 </button>
@@ -261,6 +282,7 @@
 
     </div>
 </section>
+
 <script>
     $(document).ready(function(){
     
@@ -270,6 +292,18 @@
     
     $('.select2').select2();
     $('.datepicker').datepicker().datepicker("setDate", new Date());
+    
+    // Live Image Preview Script
+    $('#student_image').change(function(){
+        let reader = new FileReader();
+        reader.onload = (e) => {
+            $('#preview_img').attr('src', e.target.result).show();
+            $('#preview_icon').hide();
+        }
+        if(this.files && this.files[0]){
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
     
     $('#payment_type').change(function(){
         if($(this).val()=='Invoice'){  

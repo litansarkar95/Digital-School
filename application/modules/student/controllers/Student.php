@@ -67,7 +67,7 @@ public function index() {
  public function get_sections_by_class() {
     $class_id = $this->input->post('class_id');
 
-    $this->db->select('sections.*');
+    $this->db->select('sections.*,class_sections.id sid');
     $this->db->from('sections');
     $this->db->join('class_sections', 'class_sections.section_id = sections.id');
     $this->db->where('class_sections.class_id', $class_id);
@@ -112,6 +112,28 @@ public function index() {
                 redirect('student/create');
             }
         } else {
+   
+     //image    
+    $config['upload_path']   = './uploads/students/';
+    $config['allowed_types'] = 'gif|jpg|jpeg|png';
+    $config['max_size']      = 10048; // 10MB
+    $config['encrypt_name']  = FALSE;
+    
+    if (!empty($_FILES['student_image']['name'])) {
+        $original_name = $_FILES['student_image']['name'];
+        $file_name = preg_replace('/[^a-zA-Z0-9._-]/', '_', $original_name);
+        $config['file_name'] = $original_name;
+    }
+
+             $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload('student_image')) {
+                $error = array('error' => $this->upload->display_errors());
+                echo $error['error'];
+            } else {
+                $upload_data = $this->upload->data();
+                $file_name = $upload_data['file_name'];
+            }
             $guardian_data = array(
                 'organization_id'   => 1,
                 'guardian_is'       => $this->input->post('guardian_is'),
@@ -140,7 +162,8 @@ public function index() {
             'dob'             => $this->input->post('dob'),
             'gender'          => $this->input->post('gender'),
             'blood_group'     => $this->input->post('blood_group'),
-            'is_active'       => 'yes'
+            'student_image'   => $file_name,
+            'is_active'       => 1
         );
         $this->db->insert('students', $student_data);
         $student_id = $this->db->insert_id();

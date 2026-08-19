@@ -7,109 +7,275 @@ class Login extends MX_Controller {
         $this->load->model("authentication_model");
     }
 
-    public function index() {
-      
-        if ($this->session->userdata('loggedin')) {
-            redirect(base_url() . "dashboard", "refresh");
+  public function index()
+{
+
+    if ($this->session->userdata('loggedin')) {
+
+        redirect(base_url() . "dashboard", "refresh");
+        exit;
+    }
+
+
+    $this->form_validation->set_rules(
+        'username',
+        'Username',
+        'required'
+    );
+
+    $this->form_validation->set_rules(
+        'password',
+        'Password',
+        'required'
+    );
+
+
+   
+    if ($this->form_validation->run() == FALSE) {
+
+        $data = array();
+
+        $data['active'] = "authentication";
+        $data['title']  = "Authentication";
+
+        $data['content'] = $this->load->view(
+            "login",
+            $data,
+            TRUE
+        );
+
+        if ($this->input->is_ajax_request()) {
+
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'status'  => false,
+                    'message' => strip_tags(
+                        validation_errors()
+                    )
+                ]));
+
+            return;
         }
 
-        $this->form_validation->set_rules('username', 'Username', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'required');
+        $this->load->view('login', $data);
 
-        if ($this->form_validation->run() == FALSE) {
-              $data = array();
-                $data['active'] = "authentication";
-                    $data['title'] = "Authentication"; 
-         $data['content'] = $this->load->view("login", $data, TRUE);
-    $this->load->view('frontend/layout/master', $data);
-           // $this->load->view('login', $data); 
+        return;
+    }
+
+    $username = $this->security->xss_clean(
+        $this->input->post("username")
+    );
+
+    $password = $this->security->xss_clean(
+        $this->input->post("password")
+    );
+
+    $remember = $this->input->post('remember');
+
+    $user = $this->authentication_model->admin_login(
+        $username,
+        $password
+    );
+
+
+    if (!$user) {
+
+      
+        if ($this->input->is_ajax_request()) {
+
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'status'  => false,
+                    'message' => 'Invalid email or password.'
+                ]));
+
+            return;
+        }
+
+
+        $this->session->set_flashdata(
+            'error',
+            'Invalid email or password.'
+        );
+
+        redirect(base_url() . "login", "refresh");
+
+        return;
+    }
+
+
+    if ($user->active != 1) {
+
+        $errorMessage =
+            "আপনার অ্যাকাউন্টটি বর্তমানে ইন-অ্যাক্টিভ আছে।";
+
+        if ($this->input->is_ajax_request()) {
+
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode([
+                    'status'  => false,
+                    'message' => $errorMessage
+                ]));
+
+            return;
+        }
+
+        $this->session->set_flashdata(
+            'error',
+            $errorMessage
+        );
+
+        redirect(base_url() . "login", "refresh");
+
+        return;
+    }
+
+
+  
+    $roleMapping = [
+        1 => 'superadmin',
+        2 => 'admin',
+        3 => 'staff',
+        4 => 'client',
+        5 => 'manager',
+        6 => 'accounts'
+    ];
+
+    $userType =
+        $roleMapping[$user->role] ?? 'user';
+
+    $getUser =
+        $this->authentication_model
+            ->getUserNameByRoleID(
+                $user->role,
+                $user->user_id
+            );
+
+
+    $sessionData = [
+
+        'name' =>
+            $getUser['name'] ?? 'Unknown',
+
+        'logger_photo' =>
+            $getUser['picture'] ?? '',
+
+        'logger_contact' =>
+            $getUser['contact_no'] ?? '',
+
+        'loggedin_org_id' =>
+            $user->organization_id,
+
+        'loggedin_branch_id' =>
+            $user->branch_id,
+
+        'active_branch_id' =>
+            $user->branch_id,
+
+        'loggedin_id' =>
+            $user->id,
+
+        'loggedin_userid' =>
+            $user->user_id,
+
+        'loggedin_role_id' =>
+            $user->role,
+
+        'loggedin_type' =>
+            $userType,
+
+        'loggedin' =>
+            true,
+
+        'needs_branch_select' =>
+            ($user->branch_id == 0)
+    ];
+
+
+    $this->load->helper('cookie');
+
+    if ($remember) {
+
+        set_cookie(
+            'remember_username',
+            $username,
+            1209600
+        );
+
+        set_cookie(
+            'remember_password',
+            $password,
+            1209600
+        );
+
+    } else {
+
+        delete_cookie('remember_username');
+        delete_cookie('remember_password');
+    }
+
+    $this->session->set_userdata(
+        $sessionData
+    );
+
+    $this->db->update(
+        'login_credential',
+        [
+            'last_login' =>
+                date('Y-m-d H:i:s')
+        ],
+        [
+            'id' => $user->id
+        ]
+    );
+    $redirectUrl = '';
+    if ($this->session->has_userdata('redirect_url')) {
+        $redirectUrl =
+         $this->session->userdata('redirect_url');
+        $this->session->unset_userdata(
+            'redirect_url'
+        );
+    } else {
+        if ($user->role == 1) {
+            $redirectUrl =
+                base_url() . "dashboard/systemadmin";
+
         } else {
-            $username = $this->security->xss_clean($this->input->post("username"));
-            $password = $this->security->xss_clean($this->input->post("password"));
-            $remember = $this->input->post('remember');
-
-            $user = $this->authentication_model->admin_login($username, $password);
-
-            if ($user) {
-           
-                if ($user->active == 1) {
-                    
-                   $roleMapping = [
-                        1 => 'superadmin',
-                        2 => 'admin',
-                        3 => 'staff',
-                        4 => 'client',
-                        5 => 'manager',
-                        6 => 'accounts'
-                    ];
-                    $userType = $roleMapping[$user->role] ?? 'user';
-
-                    $getUser = $this->authentication_model->getUserNameByRoleID($user->role, $user->user_id);
-           
-                    $sessionData = array(
-                        'name'               => $getUser['name'] ?? 'Unknown',
-                        'logger_photo'       => $getUser['picture'] ?? '',
-                        'logger_contact'     => $getUser['contact_no'] ?? '',
-                        'loggedin_org_id'    => $user->organization_id,
-                        'loggedin_branch_id' => $user->branch_id,
-                        'active_branch_id'   => $user->branch_id,
-                        'loggedin_id'        => $user->id,
-                        'loggedin_userid'    => $user->user_id,
-                        'loggedin_role_id'   => $user->role,
-                        'loggedin_type'      => $userType,
-                        'loggedin'           => true,
-                        'needs_branch_select'=> ($user->branch_id == 0)
-                    );
-
-                   
-
-                    // remember
-                if ($remember) {
-                    $this->load->helper('cookie');
-                    set_cookie('remember_username', $username, 1209600);
-                    set_cookie('remember_password', $password, 1209600);
-                } else {
-                    $this->load->helper('cookie');
-                    delete_cookie('remember_username');
-                    delete_cookie('remember_password');
-                }
-
-                    $this->session->set_userdata($sessionData);
-
-                    $this->db->update('login_credential', 
-                        array('last_login' => date('Y-m-d H:i:s')), 
-                        array('id' => $user->id)
-                    );
-
-                    //$this->session->set_flashdata('success', "Welcome Back " . $getUser['name']);
-
-
-
-
-                    if ($this->session->has_userdata('redirect_url')) {
-                        redirect($this->session->userdata('redirect_url'));
-                    } else {
-                        if ($user->role == 1) {
-                            redirect(base_url() . "dashboard/systemadmin", "refresh");
-                            
-                        } else {
-                           redirect(base_url() . "dashboard", "refresh");
-                        }
-                    }
-
-                } else {
-                   
-                    $this->session->set_flashdata('error', "আপনার অ্যাকাউন্টটি বর্তমানে ইন-অ্যাক্টিভ আছে।");
-                   redirect(base_url() . "login", "refresh");
-                }
-
-            } else {
-             
-                $this->session->set_flashdata('error', 'ইউজারনেম অথবা পাসওয়ার্ড ভুল!');
-                redirect(base_url() . "login", "refresh");
-            }
+            $redirectUrl =
+                base_url() . "dashboard";
         }
     }
+
+    if ($this->input->is_ajax_request()) {
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode([
+
+                'status'   => true,
+
+                'message'  =>
+                    'Login successful.',
+
+                'redirect' =>
+                    $redirectUrl
+
+            ]));
+
+        return;
+    }
+
+
+    redirect(
+        $redirectUrl,
+        "refresh"
+    );
+
+    exit;
+}
 
     public function logout() {
         $this->session->sess_destroy();
