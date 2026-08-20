@@ -21,6 +21,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .table-card-header::before {
@@ -42,6 +43,66 @@
     display: flex;
     align-items: center;
     gap: 8px;
+}
+
+/* Header Right Area (Export + Create Buttons) */
+.table-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Create Button Style */
+.create-btn {
+    height: 36px;
+    padding: 0 14px;
+    background: #10b981;
+    border: 1px solid #10b981;
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.create-btn:hover {
+    background: #047857;
+    border-color: #047857;
+    color: #fff;
+}
+
+/* Export Buttons Group (PDF, Excel, Print) */
+.export-buttons-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.export-btn {
+    height: 36px;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #475569;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.export-btn:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+    border-color: #94a3b8;
 }
 
 .table-filter-box {
@@ -327,8 +388,12 @@
     .table-card-header {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
+        gap: 12px;
         padding: 12px 15px;
+    }
+    .table-header-right {
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
     .table-filter-box {
         padding: 15px;
@@ -398,7 +463,7 @@
 }
 </style>
 
-<!-- SweetAlert2 CDN (পপআপ দেখানোর জন্য জরুরি) -->
+<!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- ========================================================= 
@@ -409,6 +474,25 @@
         <h3 class="table-card-title">
             <i class="fa-solid fa-table-list"></i> Recent Customers
         </h3>
+        
+        <!-- ডানপাশে এক্সপোর্ট এবং ক্রিয়েট বাটন একত্রে -->
+        <div class="table-header-right">
+            <div class="export-buttons-group">
+                <a href="#" class="export-btn" title="Export Excel">
+                    <i class="fa-solid fa-file-excel text-success"></i> Excel
+                </a>
+                <a href="#" class="export-btn" title="Export PDF">
+                    <i class="fa-solid fa-file-pdf text-danger"></i> PDF
+                </a>
+                <a href="#" class="export-btn" title="Print Table">
+                    <i class="fa-solid fa-print text-info"></i> Print
+                </a>
+            </div>
+            
+            <a href="#" class="create-btn">
+                <i class="fa-solid fa-plus"></i> Add New
+            </a>
+        </div>
     </div>
 
     <!-- আলাদা ফিল্টার ডিভ -->
@@ -456,6 +540,7 @@
                 </tr>
             </thead>
             <tbody>
+                  <?php if(!empty($exams)): foreach($exams as $key => $row): ?>
                 <tr>
                     <td data-label="ID">#101</td>
                     <td data-label="Customer Name">Sojib Ahmed</td>
@@ -466,13 +551,20 @@
                             <button class="btn btn-sm btn-light border text-primary" title="Edit">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
-                            <!-- ডিলিট বাটনে confirm-delete ক্লাস এবং data-url বা form আইডি যুক্ত করা হয়েছে -->
                             <button class="btn btn-sm btn-light border text-danger delete-btn" data-id="101" title="Delete">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </div>
                     </td>
                 </tr>
+                 <?php endforeach; else: ?>
+                        <tr>
+                            <td colspan="7" class="text-center" style="padding: 50px; color: #999;">
+                                <i class="fa fa-folder-open fa-3x"></i><br><br>
+                                <?php echo display('no_data_found'); ?>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
                 <tr>
                     <td data-label="ID">#102</td>
                     <td data-label="Customer Name">John Doe</td>
@@ -492,27 +584,18 @@
             </tbody>
         </table>
     </div>
-
+ <?php if ( $total_rows > 0 ): ?>
     <div class="table-footer">
+        
         <span style="font-size: 13px; color: #64748b; font-weight: 600;">
-            Showing 1 to 2 of 2 entries
+            Showing <?= (int) $start; ?> to <?= (int) $end; ?>  of <?= (int) $total_rows; ?> entries
         </span>
-        <nav>
-            <ul class="pagination pagination-sm">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item active"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
+
+         <?= $pagination; ?>
+      
     </div>
+     <?php endif; ?>
+
 </div>
 
 <!-- Select2 & Delete Confirmation Script -->
@@ -542,9 +625,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 cancelButtonText: 'বাতিল'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // এখানে আপনার ডিলিট রিকোয়েস্ট বা ফর্ম সাবমিট কোড লিখবেন
-                    // যেমন: window.location.href = "/delete-url/" + itemId;
-                    
                     Swal.fire(
                         'ডিলিট হয়েছে!',
                         'সফলভাবে ডাটাটি মুছে ফেলা হয়েছে।',

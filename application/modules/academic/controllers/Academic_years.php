@@ -7,8 +7,7 @@ class Academic_years extends CI_Controller {
         parent::__construct();
         $this->load->model('academic_year_model');
     }
-
-    public function index() {
+ public function index() {
         $data = array();
         $data['active'] = "academic_years";
         $data['title'] = "Academic Years"; 
@@ -44,6 +43,18 @@ class Academic_years extends CI_Controller {
         $data['label'] = "academic years";
 
         $data["content"] = $this->load->view("academic/academic_years/index", $data, true);
+        $this->load->view("layout/master", $data);
+    }
+    public function create() {
+        $data = array();
+        $data['active'] = "academic_years";
+        $data['title'] = "Academic Years"; 
+        
+        $organization_id = (int) $this->session->userdata("loggedin_org_id");
+        $branch_id = (int) $this->session->userdata("active_branch_id");
+
+
+        $data["content"] = $this->load->view("academic/academic_years/create", $data, true);
         $this->load->view("layout/master", $data);
     }
 

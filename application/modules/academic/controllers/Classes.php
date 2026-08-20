@@ -22,7 +22,7 @@ public function index()
 
      $this->pagination->initialize([
             "total_rows" => $total_rows,
-            "per_page" => 10,
+            "per_page" => 1,
             "action" => base_url("academic/classes"),
             "page_field" => "page",
             "label" => "Class ",

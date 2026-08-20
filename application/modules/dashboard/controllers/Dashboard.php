@@ -19,7 +19,7 @@ public function index()
 
 
 
-   // $data['content'] = $this->load->view("dashboard", $data, TRUE);
+    $data['content'] = $this->load->view("dashboard", $data, TRUE);
  
    $this->load->view('layout/master', $data);
 

@@ -1,314 +1,200 @@
-<?php
-defined("BASEPATH") or exit("No direct script access allowed");
+<?php defined("BASEPATH") or exit("No direct script access allowed");
 
-class MY_Pagination
-{
+class MY_Pagination {
     protected $CI;
-
     protected $per_page = 10;
-
     protected $total_rows = 0;
-
     protected $current_page = 1;
-
     protected $total_pages = 1;
-
     protected $action = "";
     protected $label = 'items';
-
     protected $page_field = "page";
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->CI = &get_instance();
-
         $this->CI->load->library("security");
     }
 
-    public function initialize($config = [])
-    {
+    public function initialize($config = []) {
         if (isset($config["per_page"])) {
             $this->per_page = max(1, (int) $config["per_page"]);
         }
-
         if (isset($config["total_rows"])) {
             $this->total_rows = max(0, (int) $config["total_rows"]);
         }
-
         if (isset($config["action"])) {
             $this->action = $config["action"];
         }
-
         if (isset($config["page_field"])) {
             $this->page_field = $config["page_field"];
         }
         if (isset($config['label'])) {
-    $this->label = $config['label'];
-}
+            $this->label = $config['label'];
+        }
 
-        $this->total_pages =
-            $this->total_rows > 0
-                ? (int) ceil($this->total_rows / $this->per_page)
-                : 1;
+        $this->total_pages = $this->total_rows > 0 ? (int) ceil($this->total_rows / $this->per_page) : 1;
 
         $page = (int) $this->CI->input->post($this->page_field);
-
         if ($page < 1) {
             $page = 1;
         }
-
         if ($page > $this->total_pages) {
             $page = $this->total_pages;
         }
 
         $this->current_page = $page;
-
         return $this;
     }
 
-    public function current_page()
-    {
+    public function current_page() {
         return $this->current_page;
     }
 
-    public function per_page()
-    {
+    public function per_page() {
         return $this->per_page;
     }
 
-    public function total_rows()
-    {
+    public function total_rows() {
         return $this->total_rows;
     }
 
-    public function total_pages()
-    {
+    public function total_pages() {
         return $this->total_pages;
     }
 
-    public function offset()
-    {
+    public function offset() {
         return ($this->current_page - 1) * $this->per_page;
     }
 
-    public function start()
-    {
+    public function start() {
         if ($this->total_rows <= 0) {
             return 0;
         }
-
         return $this->offset() + 1;
     }
 
-    public function end()
-    {
+    public function end() {
         return min(
             $this->offset() + $this->per_page,
-
             $this->total_rows
         );
     }
 
-    protected function page_range()
-    {
-        $pages = [];
+    protected function page_range() {
+        $total = $this->total_pages;
+        $current = $this->current_page;
 
-        if ($this->total_pages <= 7) {
-            for ($i = 1; $i <= $this->total_pages; $i++) {
+        // যদি মোট পেজ ৪ বা তার কম হয়, তবে সব দেখাবে
+        if ($total <= 4) {
+            $pages = [];
+            for ($i = 1; $i <= $total; $i++) {
                 $pages[] = $i;
             }
-
             return $pages;
         }
 
+        $pages = [];
+
+        // ১. সামনে সবসময় ফিক্সড ২টি পেজ (1, 2)
         $pages[] = 1;
+        $pages[] = 2;
 
-        if ($this->current_page > 4) {
+        // ২. প্রথম ডট (যদি কারেন্ট পেজ ৪ বা তার বেশি হয়)
+        if ($current > 3) {
             $pages[] = "dots";
         }
 
-        $start = max(2, $this->current_page - 1);
-
-        $end = min($this->total_pages - 1, $this->current_page + 1);
-
-        if ($this->current_page <= 3) {
-            $start = 2;
-
-            $end = 4;
+        // ৩. মাঝখানের কারেন্ট পেজ (যদি এটি ৩ এর বেশি এবং শেষ দুইটির আগের পেজ হয়)
+        if ($current > 2 && $current < $total - 1) {
+            $pages[] = $current;
         }
 
-        if ($this->current_page >= $this->total_pages - 2) {
-            $start = $this->total_pages - 3;
-
-            $end = $this->total_pages - 1;
-        }
-
-        for ($i = $start; $i <= $end; $i++) {
-            if ($i > 1 && $i < $this->total_pages) {
-                $pages[] = $i;
-            }
-        }
-
-        if ($this->current_page < $this->total_pages - 3) {
+        // ৪. শেষ ডট (যদি কারেন্ট পেজ মোট পেজের চেয়ে ৩ এর বেশি কম হয়)
+        if ($current < $total - 2) {
             $pages[] = "dots";
         }
 
-        $pages[] = $this->total_pages;
+        // ৫. পেছনে সবসময় ফিক্সড ২টি পেজ (যেমন: 499, 500)
+        $pages[] = $total - 1;
+        $pages[] = $total;
 
         return $pages;
     }
 
-    protected function csrf_field()
-    {
+    protected function csrf_field() {
         if (!isset($this->CI->security)) {
             return "";
         }
-
         $name = $this->CI->security->get_csrf_token_name();
-
         $hash = $this->CI->security->get_csrf_hash();
-
-        return '<input type="hidden" name="' .
-            html_escape($name) .
-            '" value="' .
-            html_escape($hash) .
-            '">';
+        return '<input type="hidden" name="' . html_escape($name) . '" value="' . html_escape($hash) . '">';
     }
 
-    protected function page_form($page, $label, $class = "", $disabled = false)
-    {
+    protected function page_form($page, $label, $class = "", $disabled = false) {
         $action = html_escape($this->action);
-
         $field = html_escape($this->page_field);
-
         $page = (int) $page;
+        $disabled_class = $disabled ? " disabled" : "";
+        $active_class = ($class !== "") ? " " . $class : "";
 
-        $disabled_attribute = $disabled ? " disabled" : "";
-
-        $active_class = $class !== "" ? " " . $class : "";
-
-        return '
-
-            <form
-                method="post"
-                action="' .
-            $action .
-            '"
-                class="pagination-page-form"
-            >
-
-                ' .
-            $this->csrf_field() .
-            '<input
-                    type="hidden"
-                    name="' .
-            $field .
-            '"
-                    value="' .
-            $page .
-            '"
-                >
-
-                <button
-                    type="submit"
-                    class="page-btn' .
-            $active_class .
-            '"' .
-            $disabled_attribute .
-            '
-                >
-                    ' .
-            $label .
-            '
-                </button>
-
-            </form>
-
-        ';
+        return '<li class="page-item' . $disabled_class . $active_class . '">' .
+               '<form method="post" action="' . $action . '" style="display:inline;">' .
+               $this->csrf_field() .
+               '<input type="hidden" name="' . $field . '" value="' . $page . '">' .
+               '<button type="submit" class="page-link" ' . ($disabled ? 'disabled' : '') . '>' . $label . '</button>' .
+               '</form>' .
+               '</li>';
     }
 
-    public function create_links()
-    {
-
+    public function create_links() {
         if ($this->total_rows <= 0 || $this->total_pages <= 1) {
             return "";
         }
 
-        $html = '<div class="pagination-buttons">';
+        $html = '<nav><ul class="pagination pagination-sm">';
 
+        // Previous Button (<<)
         if ($this->current_page <= 1) {
-            $html .= '
-
-                <button
-                    type="button"
-                    class="page-btn page-disabled"
-                    disabled
-                >
-                    <i class="fa fa-chevron-left"></i>
-                </button>
-
-            ';
+            $html .= '<li class="page-item disabled"><span class="page-link"><i class="fa fa-angle-double-left"></i></span></li>';
         } else {
-            $html .= $this->page_form(
-                $this->current_page - 1,
-                '<i class="fa fa-chevron-left"></i>'
-            );
+            $html .= $this->page_form($this->current_page - 1, '<i class="fa fa-angle-double-left"></i>');
         }
+
+        // Page Numbers & Dots
         foreach ($this->page_range() as $page) {
             if ($page === "dots") {
-                $html .= '
-
-                    <span class="page-dots">
-                        ...
-                    </span>
-
-                ';
-
+                $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
                 continue;
             }
 
             if ($page == $this->current_page) {
-                $html .= $this->page_form($page, $page, "page-active");
+                $html .= $this->page_form($page, $page, "active", false);
             } else {
-                $html .= $this->page_form($page, $page);
+                $html .= $this->page_form($page, $page, "", false);
             }
         }
 
+        // Next Button (>>)
         if ($this->current_page >= $this->total_pages) {
-            $html .= '
-
-                <button
-                    type="button"
-                    class="page-btn page-disabled"
-                    disabled
-                >
-                    <i class="fa fa-chevron-right"></i>
-                </button>
-
-            ';
+            $html .= '<li class="page-item disabled"><span class="page-link"><i class="fa fa-angle-double-right"></i></span></li>';
         } else {
-            $html .= $this->page_form(
-                $this->current_page + 1,
-                '<i class="fa fa-chevron-right"></i>'
-            );
+            $html .= $this->page_form($this->current_page + 1, '<i class="fa fa-angle-double-right"></i>');
         }
 
-        $html .= "</div>";
-
+        $html .= '</ul></nav>';
         return $html;
     }
 
-public function get_data()
-{
-    return array(
-        'total_rows'   => $this->total_rows(),
-        'per_page'     => $this->per_page(),
-        'current_page' => $this->current_page(),
-        'offset'       => $this->offset(),
-        'start'        => $this->start(),
-        'end'          => $this->end(),
-        'pagination'   => $this->create_links(),
-        'label'        => $this->label
-    );
-}
+    public function get_data() {
+        return array(
+            'total_rows' => $this->total_rows(),
+            'per_page' => $this->per_page(),
+            'current_page' => $this->current_page(),
+            'offset' => $this->offset(),
+            'start' => $this->start(),
+            'end' => $this->end(),
+            'pagination' => $this->create_links(),
+            'label' => $this->label
+        );
+    }
 }
